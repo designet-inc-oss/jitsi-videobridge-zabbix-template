@@ -116,7 +116,7 @@ This template has been tested in the following environment:
   + Only system-wide statistics for the entire Jitsi system are available
 * Due to the specification that statistics return data only for the time of collection, historical data cannot be registered.
 
-# Acknowledgments
+## Acknowledgments
 This template is a modified version of the template created in the following project, adapted for Jitsi stable-9779/Zabbix 7 
 and specialized for monitoring VideoBridge statistics:
 * https://github.com/romantico88/jitsi_videobridge_zabbix_stats/
