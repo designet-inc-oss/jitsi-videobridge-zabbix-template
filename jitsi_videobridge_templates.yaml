@@ -1,0 +1,843 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: cec0a59074054ddebfef4981adbc9439
+      name: 'Templates App'
+  templates:
+    - uuid: 7f916e6fffab40f6ba2123688f076cd5
+      template: 'Template Jitsi Videobridge'
+      name: 'Template Jitsi Videobridge'
+      description: |
+        Jitsi Videobridge statistics acquisition template.
+        Statistics are acquired based on Jitsi's Colibri Rest API specifications.
+        
+        JSON acquired from URLs such as http://jitsi_host:8080/colibri/stats is analyzed using Zabbix functions and the information is registered.
+        
+        The statistical information acquired is described below, but there may be differences between the statistical information in the document and the items that can actually be acquired.
+        https://github.com/jitsi/jitsi-videobridge/blob/master/doc/statistics.md
+        ---
+        
+        Jitsi Videobridgeの統計取得テンプレート。
+        JitsiのColibri Rest APIの仕様に基づいて統計を取得します。
+        
+        http://jitsi_host:8080/colibri/statsなどのURLから取得をしたJSONをZabbixの機能で解析を行い、情報の登録を行います。
+        
+        取得する統計情報については以下に記載がありますが、ドキュメントの統計情報と実際に取得できる項目に差がある場合があります。
+        https://github.com/jitsi/jitsi-videobridge/blob/master/doc/statistics.md
+      groups:
+        - name: 'Templates App'
+      items:
+        - uuid: d4243fcbf3e64972839929434a935f9d
+          name: 'Jitsi Videobridge bit_rate_download'
+          type: DEPENDENT
+          key: jitsi.videobridge.bit_rate_download
+          delay: '0'
+          history: 7d
+          units: bits
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.bit_rate_download
+            - type: MULTIPLIER
+              parameters:
+                - '1024'
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: c398f3d06d41410d9baaa42ede56da08
+          name: 'Jitsi Videobridge bit_rate_upload'
+          type: DEPENDENT
+          key: jitsi.videobridge.bit_rate_upload
+          delay: '0'
+          history: 7d
+          units: bits
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.bit_rate_upload
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 9542c0f72fd74fc1be01f2ef624b0d4d
+          name: 'Jitsi Videobridge conferences'
+          type: DEPENDENT
+          key: jitsi.videobridge.conferences
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.conferences
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 363a1fee86394de390767d15895d9378
+          name: 'Jitsi Videobridge endpoints'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: bf59c3df3b844fa8b7ec4c86dc62f355
+          name: 'Jitsi Videobridge endpoints_disconnected'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints_disconnected
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints_disconnected
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 4e7cddfef2c34c648a5a2c8edb264ef3
+          name: 'Jitsi Videobridge endpoints_sending_audio'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints_sending_audio
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints_sending_audio
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: c3e9e344f50247dcaec7b8af417021f0
+          name: 'Jitsi Videobridge endpoints_sending_video'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints_sending_video
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints_sending_video
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 1d5553db55ba4c6d971e76554b5cc347
+          name: 'Jitsi Videobridge endpoints_with_high_outgoing_loss'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints_with_high_outgoing_loss
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints_with_high_outgoing_loss
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 349075acd2da4a53b65e43b66f6ddfd3
+          name: 'Jitsi Videobridge endpoints_with_spurious_remb'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints_with_spurious_remb
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints_with_spurious_remb
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: dbf6702bba0c4b2c9b7366feb103bb37
+          name: 'Jitsi Videobridge endpoints_with_suspended_sources'
+          type: DEPENDENT
+          key: jitsi.videobridge.endpoints_with_suspended_sources
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.endpoints_with_suspended_sources
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 6b1e52a5a046460ea529a77ee5acb0d1
+          name: 'Jitsi Videobridge inactive_conferences'
+          type: DEPENDENT
+          key: jitsi.videobridge.inactive_conferences
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.inactive_conferences
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 6aab0d80c05b4a6db97e22b1a68c4f65
+          name: 'Jitsi Videobridge inactive_endpoints'
+          type: DEPENDENT
+          key: jitsi.videobridge.inactive_endpoints
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.inactive_endpoints
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 49c630922b0840bea0b4126b77c2e87b
+          name: 'Jitsi Videobridge incoming_loss'
+          type: DEPENDENT
+          key: jitsi.videobridge.incoming_loss
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.incoming_loss
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 50ac6e5c0711448287298662558a60a7
+          name: 'Jitsi Videobridge largest_conference'
+          type: DEPENDENT
+          key: jitsi.videobridge.largest_conference
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.largest_conference
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 277bf6d267fa43459a116ce281917a2c
+          name: 'Jitsi Videobridge local_active_endpoints'
+          type: DEPENDENT
+          key: jitsi.videobridge.local_active_endpoints
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.local_active_endpoints
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: f2f17cf9850a4117958f815f53f5e6ab
+          name: 'Jitsi Videobridge local_endpoints'
+          type: DEPENDENT
+          key: jitsi.videobridge.local_endpoints
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.local_endpoints
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: e184935b24b24d818df9dcde07a01433
+          name: 'Jitsi Videobridge outgoing_loss'
+          type: DEPENDENT
+          key: jitsi.videobridge.outgoing_loss
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.outgoing_loss
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 6fe989cb90ae4df29f73b2af3f901b22
+          name: 'Jitsi Videobridge p2p_conferences'
+          type: DEPENDENT
+          key: jitsi.videobridge.p2p_conferences
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.p2p_conferences
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: d34d10f5b89745f9b8586a73404f588a
+          name: 'Jitsi Videobridge packet_rate_download'
+          type: DEPENDENT
+          key: jitsi.videobridge.packet_rate_download
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.packet_rate_download
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 909a2942b12c4e938d7b53bf6b34c1ce
+          name: 'Jitsi Videobridge packet_rate_upload'
+          type: DEPENDENT
+          key: jitsi.videobridge.packet_rate_upload
+          delay: '0'
+          history: 7d
+          units: K
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.packet_rate_upload
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 29087390adb54f3ba4dd71a7e9a3090c
+          name: 'Jitsi Videobridge participants'
+          type: DEPENDENT
+          key: jitsi.videobridge.participants
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.participants
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: b07238cf08794e5a955ee651caa5f449
+          name: 'Jitsi Videobridge receive_only_endpoints'
+          type: DEPENDENT
+          key: jitsi.videobridge.receive_only_endpoints
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.receive_only_endpoints
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 41ae474d0c54482788ad85cddf3c3546
+          name: 'Jitsi Videobridge rtt_aggregate'
+          type: DEPENDENT
+          key: jitsi.videobridge.rtt_aggregate
+          delay: '0'
+          history: 7d
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.rtt_aggregate
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 7f6679fec4c94cfd92e925cd36dbabae
+          name: 'Jitsi Videobridge threads'
+          type: DEPENDENT
+          key: jitsi.videobridge.threads
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.threads
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 6bb40205915043b0a9fcc1939ede785c
+          name: 'Jitsi Videobridge total_bytes_received'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_bytes_received
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_bytes_received
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 735043779b714789a62e36a4fcc971fd
+          name: 'Jitsi Videobridge total_bytes_sent'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_bytes_sent
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_bytes_sent
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: afcef4712092492caa3973ca67f14550
+          name: 'Jitsi Videobridge total_conferences_completed'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_conferences_completed
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_conferences_completed
+            - type: SIMPLE_CHANGE
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 1d9ab3fabb5c45aaacd8c8881d5e8784
+          name: 'Jitsi Videobridge total_conferences_created'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_conferences_created
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_conferences_created
+            - type: SIMPLE_CHANGE
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: ad5b9d8bc0bc45dcad0e542115554fee
+          name: 'Jitsi Videobridge total_conference_seconds'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_conference_seconds
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_conference_seconds
+            - type: SIMPLE_CHANGE
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 29369570c19241dcb88f2de93f737a70
+          name: 'Jitsi Videobridge total_data_channel_messages_received'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_data_channel_messages_received
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_data_channel_messages_received
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 0f5933d7e86e4d329c9a4943a2b66f62
+          name: 'Jitsi Videobridge total_data_channel_messages_sent'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_data_channel_messages_sent
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_data_channel_messages_sent
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 30ed4af310ce4bc49de77ad426c3c59c
+          name: 'Jitsi Videobridge total_dominant_speaker_changes'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_dominant_speaker_changes
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_dominant_speaker_changes
+            - type: SIMPLE_CHANGE
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: f136c12804ae44ccaaedb920a9b8e965
+          name: 'Jitsi Videobridge total_packets_received'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_packets_received
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_packets_received
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: a82f0135ea644f9b8d3e7dc0cfdf1c86
+          name: 'Jitsi Videobridge total_packets_sent'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_packets_sent
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_packets_sent
+            - type: CHANGE_PER_SECOND
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 84edd71a6cee45aa829f86e6749ec7a1
+          name: 'Jitsi Videobridge total_participants'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_participants
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_participants
+            - type: SIMPLE_CHANGE
+              parameters:
+                - ''
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 03f57cee1d14448892ae085d967a243a
+          name: 'Jitsi Videobridge total_video_stream_milliseconds_received'
+          type: DEPENDENT
+          key: jitsi.videobridge.total_video_stream_milliseconds_received
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.total_video_stream_milliseconds_received
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 45a2af1cb79b4af085f10f3b07d301da
+          name: 'Jitsi Videobridge visitors'
+          type: DEPENDENT
+          key: jitsi.videobridge.visitors
+          delay: '0'
+          history: 7d
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.visitors
+          master_item:
+            key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          tags:
+            - tag: Application
+              value: Jitsi
+        - uuid: 1cb7918e24a34011b934da53ceff09bf
+          name: 'Jitsi Videobridge Stats'
+          key: 'web.page.get[{$JITSI_COLIBRI_HOST},/colibri/stats,{$JITSI_COLIBRI_PORT}]'
+          history: 7d
+          value_type: TEXT
+          trends: '0'
+          preprocessing:
+            - type: REGEX
+              parameters:
+                - '\n\s?\n(.*)'
+                - \1
+          tags:
+            - tag: Application
+              value: Jitsi
+      macros:
+        - macro: '{$JITSI_COLIBRI_HOST}'
+          value: localhost
+        - macro: '{$JITSI_COLIBRI_PORT}'
+          value: '8080'
+  graphs:
+    - uuid: c52c4bd9558f4522ad9b43bdbb92fca8
+      name: 'Jitsi Bit Rate'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.bit_rate_download
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.bit_rate_upload
+    - uuid: 3aebc6577dee49a9acdfc7ba2fa05314
+      name: 'Jitsi Channels'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.visitors
+        - sortorder: '1'
+          color: 2774A4
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_video_stream_milliseconds_received
+    - uuid: a71542d68bde44aabc85da575cc6ed24
+      name: 'Jitsi Conferences and Participants'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.conferences
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.participants
+        - sortorder: '2'
+          color: 2774A4
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.p2p_conferences
+    - uuid: e552b0d77634426d909d75614f982c68
+      name: 'Jitsi Endpoints'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.endpoints
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.endpoints_sending_video
+        - sortorder: '2'
+          color: 2774A4
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.inactive_endpoints
+        - sortorder: '3'
+          color: A54F10
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.receive_only_endpoints
+        - sortorder: '4'
+          color: '274482'
+          calc_fnc: ALL
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.endpoints_sending_audio
+    - uuid: f61aed36736e4787a8b844bd1f5a9431
+      name: 'Jitsi Largest Conference Size'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.largest_conference
+    - uuid: 30277f1e1a764806ae3cb9761acf5959
+      name: 'Jitsi Loss Rate'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.outgoing_loss
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.incoming_loss
+    - uuid: 2cabd9d6a1d0466c8fcd18bf30e09d09
+      name: 'Jitsi Packet Rate'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.packet_rate_download
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.packet_rate_upload
+    - uuid: 747135595cfc4f4a9162ee3b6dd5b10c
+      name: 'Jitsi RTT'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.rtt_aggregate
+    - uuid: 40ba8a790f74417d8c8d48fc246a76a0
+      name: 'Jitsi Threads'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.threads
+    - uuid: 9022ea93eb5c4b82af7809ed9fccd555
+      name: 'Jitsi Total Bytes per Second'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 2774A4
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_bytes_received
+        - sortorder: '1'
+          color: A54F10
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_bytes_sent
+    - uuid: 2d82126709c9485e89208410cf3b269d
+      name: 'Jitsi Total Conferences per Minute'
+      show_work_period: 'NO'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_conferences_completed
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_conferences_created
+        - sortorder: '2'
+          color: 2774A4
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_participants
+    - uuid: d61d9e40bf4345b3a29ebd6b6270fac4
+      name: 'Jitsi Total Conference Time in Minute'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_conference_seconds
+    - uuid: 5c65597d34644eef9cb05b128c1618c7
+      name: 'Jitsi Total Data Messages per Second'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_data_channel_messages_received
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_data_channel_messages_sent
+    - uuid: f855b5f68ea84a30954bbfb77935786c
+      name: 'Jitsi Total Packets per Second'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_packets_received
+        - sortorder: '1'
+          color: F63100
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_packets_sent
+    - uuid: 634f9a342dbd41fa812d545157ed20a6
+      name: 'Jitsi Total Speaker Changes per minute'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Template Jitsi Videobridge'
+            key: jitsi.videobridge.total_dominant_speaker_changes
